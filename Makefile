@@ -6,10 +6,10 @@ help: ## Display available commands
 install: ## Install all deps
 	cd back && composer install
 
-start: ## start dev environment en daemon mode
+start: db-start ## start dev environment en daemon mode
 	cd back && symfony server:start -d
 
-stop: ## stop dev environment
+stop: db-stop ## stop dev environment
 	cd back && symfony server:stop
 
 logs: ## Display dev server logs
