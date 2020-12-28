@@ -9,7 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
+ * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass=LocationRepository::class)
+ * use repository for handy tree functions
+ * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
 class Location
 {
@@ -48,6 +51,12 @@ class Location
     private $updated;
 
     /**
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="lft", type="integer")
+     */
+    private $lft;
+
+    /**
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer")
      */
@@ -78,11 +87,6 @@ class Location
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;
-
-    /**
-     * @ORM\Column(type="string", length=500)
-     */
-    private $description;
 
     public function __construct()
     {
@@ -118,18 +122,6 @@ class Location
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getCreated(): ?\DateTimeInterface
     {
         return $this->created;
@@ -150,6 +142,18 @@ class Location
     public function setUpdated(\DateTimeInterface $updated): self
     {
         $this->updated = $updated;
+
+        return $this;
+    }
+
+    public function getLft(): ?int
+    {
+        return $this->lft;
+    }
+
+    public function setLft(int $lft): self
+    {
+        $this->lft = $lft;
 
         return $this;
     }
