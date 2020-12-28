@@ -9,7 +9,8 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Location|null find($id, $lockMode = null, $lockVersion = null)
  * @method Location|null findOneBy(array $criteria, array $orderBy = null)
- * @method Location[]    findAll()
+ * @method Location[]    findByList()
+ * @method Location[]    findAllForList()
  * @method Location[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class LocationRepository extends ServiceEntityRepository
@@ -19,6 +20,22 @@ class LocationRepository extends ServiceEntityRepository
         parent::__construct($registry, Location::class);
     }
 
+    /**
+     * @return Location[]
+     */
+    public function findByList(): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT p.id, p.title
+            FROM App\Entity\Location p
+            ORDER BY p.lvl ASC'
+        );
+
+        // returns an array of Product objects
+        return $query->getResult();
+    }
     // /**
     //  * @return Location[] Returns an array of Location objects
     //  */

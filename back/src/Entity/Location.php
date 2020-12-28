@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups as Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @Gedmo\Tree(type="nested")
@@ -25,6 +28,7 @@ class Location
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"list_locations"})
      */
     private $title;
 
@@ -72,6 +76,8 @@ class Location
      * @Gedmo\TreeRoot
      * @ORM\ManyToOne(targetEntity="Location")
      * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
+     * @Ignore()
+     * @MaxDepth(1)
      */
     private $root;
 
@@ -79,12 +85,16 @@ class Location
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Location", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Ignore()
+     * @MaxDepth(1)
      */
     private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Location", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})
+     * @Ignore()
+     * @MaxDepth(1)
      */
     private $children;
 

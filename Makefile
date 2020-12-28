@@ -5,6 +5,7 @@ help: ## Display available commands
 
 install: ## Install all deps
 	cd back && composer install
+	cd front && yarn
 
 start: db-start ## start dev environment en daemon mode
 	cd back && symfony server:start -d
@@ -15,22 +16,12 @@ stop: db-stop ## stop dev environment
 logs: ## Display dev server logs
 	cd back && symfony server:log
 
-test: ## Start tests
-	cd back && php bin/phpunit
-
-update_openapi-contract: ## Extract OpenAPI contract in yaml and json
-	cd back && php bin/console api:openapi:export --yaml --output=public/openapi.yaml
-	cd back && php bin/console api:openapi:export --output=public/openapi.json
+docker-logs: ## Display pg logs from Docker Compose
+	docker-compose logs -f
 
 db-start: ## start PostgreSQL in Docker Compose
-	cd back && docker-compose up -d
+	docker-compose up -d
 
 db-stop: ## stop Docker Compose PG
-	cd back && docker-compose down
+	docker-compose down
 
-db-logs: ## Display pg logs from Docker Compose
-	cd back && docker-compose logs -f
-
-db-init: ## Play all migration and import data from legacy markdown files
-	cd back && php bin/console doctrine:migrations:migrate -n
-	cd back && php bin/console doctrine:fixtures:load -n

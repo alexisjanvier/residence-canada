@@ -16,8 +16,9 @@ class LocationsController extends AbstractController
     {
         $locations = $this->getDoctrine()
             ->getRepository(Location::class)
-            ->childrenHierarchy();
+            ->findAll();
+        //->findby(array(), array('lvl' => 'asc'));
 
-        return $this->json($locations);
+        return $this->json($locations, $status = 200, $headers = [], $context = ['list_locations']);
     }
 }
